@@ -1,8 +1,9 @@
 include <config.scad>;
+use <misc_parts.scad>;
 
 msep = 31;
-screw = 4;
-bearing = [10, 16.3, 5];
+screw = 3.4;
+bearing = [10, 16.5, 5];
 bthick = 2; //minimum thickness of wall behind bearing
 
 zbase = msep/sqrt(2);
@@ -35,18 +36,19 @@ module zplate_holes(slot_length=5) {
     
     //slots for extrusion mounting
     translate([-ex/2,-spacer_thick/2-slot_length/2-ex/2+2]) 
-        rotate([0,0,90]) slot(reg_rad, slot_length, $fn=16);
+        rotate([0,0,90]) slot(reg_rad+.15, slot_length, $fn=16);
     translate([ ex/2,-spacer_thick/2-slot_length/2-ex/2+2]) 
-        rotate([0,0,90]) slot(reg_rad, slot_length, $fn=16);
+        rotate([0,0,90]) slot(reg_rad+.15, slot_length, $fn=16);
 }
 
-module screwplate(thick=9, slot_length=6) {
+module screwplate(thick=6.35, slot_length=6) {
     bottom = spacer_thick/2+ex*.25+slot_length;
     module screwhole(flip=false) {
         t = thick - 2*bthick;
         
-        translate([0,0,3]) cylinder(r=3, h=thick, $fn=32);
-        translate([0,0,-1]) cylinder(r=screw/2, h=4, $fn=16); 
+        translate([0,0,-1]) cylinder(r=3, h=1+thick-5, $fn=32);
+        translate([0,0,thick-5]) cylinder(r1=3, r2=screw/2, h=2, $fn=32);
+        translate([0,0,3]) cylinder(r=screw/2, h=thick+2, $fn=32); 
     }
     difference() {
         render(convexity=10) linear_extrude(height=thick) difference() {
@@ -63,9 +65,15 @@ module screwplate(thick=9, slot_length=6) {
         translate([0, zbase]) screwhole();
         translate([ zbase,0]) screwhole();
     }
+    
+    translate([0,0,thick-1]) rotate([0,0,45]) {
+        motor_spacer(width=12, height=43);
+        rotate([0,0,90]) motor_spacer(width=12, height=43);
+        rotate([0,0,-90]) motor_spacer(width=12, height=43);
+    }
 }
 
-module bottomplate(thick=9, slot_length=6) {
+module bottomplate(thick=6.35, slot_length=6) {
     bottom = spacer_thick/2+ex*.75+slot_length;
     difference() {
         render(convexity=10) linear_extrude(height=thick) difference() {

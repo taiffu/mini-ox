@@ -9,7 +9,7 @@ module _pla_screws() {
     translate([back_edge+30, gantry[1]-top_offset/2]) circle(r=s);
     //translate([back_edge+45+dist/2, gantry[1]-top_offset]) circle(r=s);
     //translate([back_edge+45+1.5*dist, gantry[1]-top_offset-x_rail/2]) circle(r=s);
-    translate([back_edge+45+2.5*dist, gantry[1]-top_offset-x_rail-ex/2]) circle(r=s);
+    translate([back_edge+45+2.1*dist, gantry[1]-top_offset-x_rail-ex/2]) circle(r=s);
     
     //Add mount holes for l brackets
     translate([back_edge-15, gantry[1]-top_offset-x_rail+0.5*ex]) circle(r=reg_rad);
@@ -19,7 +19,10 @@ module _pla_screws() {
     
     
     //slot for belt
-    translate([back_edge+ex-ex/2-1, gantry[1]-top_offset+1]) slot(1.5, 6);
+    translate([back_edge+ex-ex/2-1, gantry[1]-top_offset+1]) slot(1.5, 10);
+    
+    //slot for y motor wire
+    translate([back_edge+ex/2, gantry[1]-top_offset-ex]) slot(1.5, 12);
 }    
 
 module side(nema_face=22.5) {
@@ -39,15 +42,17 @@ module side(nema_face=22.5) {
         translate([gantry[0]-dist, dist]) circle(r=ecc_rad);
         //top rollers
         translate([dist,roller_top]) circle(r=reg_rad);
+        translate([gantry[0]/2, roller_top]) circle(r=reg_rad);
         translate([gantry[0]-dist,roller_top]) circle(r=reg_rad);
-        //idler rollers
-        translate([gantry[0]/2-roller_rad-pulley_width/2, roller_top])
-            circle(r=reg_rad);
-        translate([gantry[0]/2+roller_rad+pulley_width/2, roller_top])
-            circle(r=reg_rad);
+        //motor
+        translate([gantry[0]/4+dist/2, roller_top+motor_top]) 
+            rotate([0,0,90]) nema17(face=nema_face);
         
-        translate([gantry[0]/2, roller_top+motor_top]) rotate([0,0,90])
-            nema17(face=nema_face);
+        //tiedown for wires
+        translate([gantry[0]/4+dist/2, roller_top+motor_top+40]) {
+            translate([-ex/2,0]) circle(r=reg_rad);
+            translate([ ex/2,0]) circle(r=reg_rad);
+        }
     }
 }
 

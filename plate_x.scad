@@ -111,4 +111,6 @@ module frontplate() {
         }
     }
 }
+
+translate([0,-100]) frontplate();
 backplate();
