@@ -1,10 +1,13 @@
 include <config.scad>;
+bthick = 4; //minimum thickness of wall behind bearing
+thick = 4;
 
 module backplate() {
     $fn=64;
     motor_top = 27;
     roller_top = dist+sep-ex+x_rail;
-    render() difference() {
+    
+    render() linear_extrude(height=thick) difference() {
         offset(dist) offset(-dist) 
         polygon([
             [-carriage[0]/2, 0], [carriage[0]/2,0],
@@ -34,6 +37,7 @@ module backplate() {
         translate([-carriage[0]/2+dist,roller_top]) circle(r=reg_rad);
         translate([ carriage[0]/2-dist,roller_top]) circle(r=reg_rad);
         
+        
         //center cutout
         /*offset(dist) offset(-dist) polygon([
             [ carriage[0]/2-2.5*dist, 2*dist],
@@ -53,7 +57,7 @@ module frontplate() {
     mid = (roller_top+dist)/2;
     zsep = sep-ex+z_rail;
     
-    render() difference() {
+    render() linear_extrude(height=thick) difference() {
         offset(dist) offset(-dist) 
         polygon([
             [-carriage[0]/2, 0], 
